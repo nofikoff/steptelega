@@ -399,7 +399,7 @@ class ApiController extends Controller
                 $stat_stud_all = Students::find()->count();
 
                 $stat_par_active = Timetable::find()->where('`start_date` > NOW()')->count();
-                $stat_par_all = Timetable::find()->count() - $stat_par_active;
+                //$stat_par_all = Timetable::find()->count() - $stat_par_active;
 
                 $stat_prepod_all = Teacher::find()->count();
                 //$stat_prepod_active = Teacher::find()->joinWith('timetables')->where('start_date > NOW()')->groupBy('teacher_id')->count();
@@ -427,7 +427,7 @@ class ApiController extends Controller
                     "<b>СПРАВОЧНИК</b> 
 Bot адрес @ITStepZhitomir_bot
 Ваш ChatID = <b>" . $this->telega->chat_id . "</b>
-Инструкция <a href='https://telegra.ph/ITStepZhitomir-bot-Instrukciya-06-12'>здесь</a>
+Инструкция, о проекте <a href='https://telegra.ph/ITStepZhitomir-bot-Instrukciya-06-12'>смотри по ссылке.</a> 
 
 <b>ПАРЫ ПО ВРЕМЕНИ:</b>
    №1 09:00-10:20
@@ -446,17 +446,13 @@ Bot адрес @ITStepZhitomir_bot
    <b>$sub_users_group</b> пользователей/чатов подписаны на <b>$stat_users_subsc_group</b> групп; 
 
 В активном расписании (запланированные пары):
-   <b>$stat_par_active</b> пар (завершено <b>$stat_par_all</b> c 15.04.19);
+   <b>$stat_par_active</b> пар;
    <b>$stat_stud_all</b> студентов всего;
    <b>$stat_group_active</b> групп (всего <b>$stat_group_all</b>);
    <b>$stat_prepod_active</b> преподавателей (всего <b>$stat_prepod_all</b>);
  
-<b>РАЗРАБОТЧИКИ:</b>
- - студент группы РПЗСТ-о161: Олег Статкевич
- - студент группы РПЗСТ-о161: Никита Юрченко
- - руководитель проекта: преподаватель <a href='https://t.me/Nofikoff'>Руслан Новиков</a>
-  
  Ждем ваши рекомендации и пожелания!
+ <a href='https://t.me/Nofikoff'>Руслан Новиков</a>
 
 ");
                 return;

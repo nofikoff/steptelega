@@ -3,15 +3,15 @@
 namespace app\components;
 
 //чтобы сообщить телеграмму наш адрес хука (сертификат нафиг отключсили гдето в п араметрах)
-//https://api.telegram.org/bot819281180:AAEKXL1es2JmGLgqY9Dt58GjXbD69jc4AqI/setWebhook?url=https://steptelega.protection.kiev.ua/api/init
-//https://api.telegram.org/bot698408457:AAES7vj2YVnt7tpGMoHQpbyxcG2gh7tkJa8/setWebhook?url=https://steptelega.protection.kiev.ua/api/webhook
+//https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/setWebhook?url=https://steptelega.protection.kiev.ua/api/init
+//https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/setWebhook?url=https://steptelega.protection.kiev.ua/api/webhook
 
 //проверить инфо по Вебхуку тут
 //апдейт - херня, правду не показывает смотри логи Yii2
-//https://api.telegram.org/bot819281180:AAEKXL1es2JmGLgqY9Dt58GjXbD69jc4AqI/getWebhookInfo
+//https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/getWebhookInfo
 
 // хер вам - это если вэбхук не используется
-// Взять ID чата https://api.telegram.org/bot819281180:AAEKXL1es2JmGLgqY9Dt58GjXbD69jc4AqI/getUpdates
+// Взять ID чата https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/getUpdates
 // чтобы получить ID группы, которая шлет команды боту
 // после добавления его в группу поищи в логах строку вида
 // {"message_id":3772,"from":{"id":819281180,"is_bot":true,"first_name":"StepToday","username":"StepToday_bot"},"chat":{"id":-1001161487189,"title":"WEB_182",
