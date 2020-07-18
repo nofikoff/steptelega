@@ -18,6 +18,7 @@ use app\components\ParserExamens;
 use app\models\Groupstep;
 use app\models\Teacher;
 use app\models\TelegramSubscribtion;
+
 //use app\module\parser;
 use app\models\Timetable;
 use yii\console\Controller;
@@ -44,6 +45,9 @@ class HelloController extends Controller
 
     public function actionTest()
     {
+
+
+
         while ($a = Timetable::find()
             ->where(['countpara' => 0])
             ->one()) {
@@ -60,7 +64,7 @@ class HelloController extends Controller
                 $b->countpara = $i++;
                 $b->save();
                 echo $i;
-                echo " ".$b->start_date . " - " . $b->start_time . "; ";
+                echo " " . $b->start_date . " - " . $b->start_time . "; ";
             }
             echo "\r\n ";
 
@@ -84,25 +88,74 @@ class HelloController extends Controller
 
     public function actionCron()
     {
-
-
-//        // TEST УДАЛИТЬ
-//        // TEST УДАЛИТЬ
-//        // TEST УДАЛИТЬ
-//        // TEST УДАЛИТЬ
-//        // TEST УДАЛИТЬ
-//        $a = new Parser();
-//        $a->change_teacher(64);
-//        $a->parse_shedul_json(64,0);
-//        exit;
-//        exit;
-//        exit;
-//        exit;
-//        exit;
-
+        //ВСЕ НОВОЕ РАСПИСАНИЕ В ОДИН МАССИВ!!
+        $a = new Parser();
 
         //define('_BOT_NAME', 'StepToday_bot');
         define('_BOT_NAME', 'ITStepZhitomir_bot');
+
+
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        // ЧЕРНОВЦЫ
+        // ЧЕРНОВЦЫ
+        // ЧЕРНОВЦЫ
+        // разлогиниваемся
+        @unlink("/home/steptelega/public_html/cookies.txt");
+        $a->loog_book_user = \Yii::$app->params['logbook_Chernovtsy_Zhitomir_my_login'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_Chernovtsy_Zhitomir_my_pass'];
+        // черновцы 46
+        $a->loog_book_id_city = "46";
+        $a->get_auth();
+
+        // переключим город дропдаун в логбуке
+        // переключим город дропдаун в логбуке
+        $headers =
+            [
+                'authority: logbook.itstep.org',
+                'pragma: no-cache',
+                'cache-control: no-cache',
+                'upgrade-insecure-requests: 1',
+                'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36',
+                'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                'sec-fetch-site: same-origin',
+                'sec-fetch-mode: navigate',
+                'sec-fetch-user: ?1',
+                'sec-fetch-dest: document',
+                'referer: https://logbook.itstep.org/',
+                'accept-language: en-UA,en;q=0.9,ru-AU;q=0.8,ru;q=0.7,en-US;q=0.6',
+            ];
+        $b = $a->send_http_post("https://logbook.itstep.org/auth/change-city?city=" . $a->loog_book_id_city, "GET", $headers);
+
+        // этоту тта не надо
+        //$a->change_teacher(60);
+        // пишем в мое распиание 60
+        $a->parse_shedul_json(60, 0, 3);
+        $a->parse_shedul_json(60, 1, 3);
+        $a->parse_shedul_json(60, 2, 3);
+        $a->parse_shedul_json(60, 3, 3);
+
+
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        // ЛУЦК
+        // ЛУЦК
+        // ЛУЦК
+        //@unlink("/home/steptelega/public_html/cookies.txt");
+
+        $a->loog_book_user = \Yii::$app->params['logbook_Lutsk_my_login'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_Lutsk_my_pass'];
+        $a->loog_book_id_city = "null";
+        $a->get_auth();
+        // этоту тта не надо
+        //$a->change_teacher(60);
+        // пишем в мое распиание 60
+        $a->parse_shedul_json(60, 0, 2);
+        $a->parse_shedul_json(60, 1, 2);
+        $a->parse_shedul_json(60, 2, 2);
+        $a->parse_shedul_json(60, 3, 2);
 
 
         // DONT MOVE !!! -2019.09 сервис закрыт с внешнего мира по IP https://adminlb.itstep.org/
@@ -110,11 +163,14 @@ class HelloController extends Controller
         //здесь получаем списки студентов а заодно актуальный справочник групп с их ID
         //если парсить с логубка -список новых групп получам без id тока по имени
         //
-        $a = new ParserExamens();
-        $a->get_all_active_students_and_groups();
+        $b = new ParserExamens();
+        $b->get_all_active_students_and_groups();
 
 
-        $a = new Parser();
+        $a->loog_book_user = \Yii::$app->params['logbook_manager_user'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_manager_password'];
+        $a->loog_book_id_city = "39";
+        $a->get_auth();
         // здесь под глобальным эккаунтом обновляем активный справочник тичеров
         // отключаем удаленных тичеров статус = 0
         $a->update_teachers_and_groups();
@@ -128,7 +184,7 @@ class HelloController extends Controller
 
             // две недели
             // СНАЧАЛА ПИШЕМ ВСЕ ПАРЫ ЧТО МОЖЕМ ПИСАТЬ (без учета измененных)
-            $a->parse_shedul_json($teacher->id_teacher);
+            $a->parse_shedul_json($teacher->id_teacher, 0);
             $a->parse_shedul_json($teacher->id_teacher, 1);
             $a->parse_shedul_json($teacher->id_teacher, 2);
             $a->parse_shedul_json($teacher->id_teacher, 3);
@@ -147,6 +203,8 @@ class HelloController extends Controller
             // сравниваем реальный вектор спарсенных пар с базой что мы получили
             // здесь важны сообщения об имзененных парах - те что не сохранились
             $a->compare_what_changed_and_deleted();
+            echo "******** МАССИВ СООБЩЕНИЙ В ЭТОЙ ИТЕРАЦИИ ***********";
+            echo "******** МАССИВ СООБЩЕНИЙ В ЭТОЙ ИТЕРАЦИИ ***********";
             echo "******** МАССИВ СООБЩЕНИЙ В ЭТОЙ ИТЕРАЦИИ ***********";
 
             print_r($a->_telega_list_parser_messages);

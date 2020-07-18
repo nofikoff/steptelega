@@ -108,6 +108,10 @@ class SiteController extends Controller
 
 
         $a = new Parser();
+        $a->loog_book_user = \Yii::$app->params['logbook_manager_user'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_manager_password'];
+        $a->loog_book_id_city = "39";
+        $a->get_auth();
         $a->change_teacher($id_teacher);
 
 

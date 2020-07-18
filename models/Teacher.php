@@ -50,12 +50,13 @@ class Teacher extends \yii\db\ActiveRecord
         ];
     }
 
-    static function detectNotActiveByTameTable() {
+    static function detectNotActiveByTameTable()
+    {
         Yii::$app->getDb()->createCommand("UPDATE `teacher` set `not_in_timetable_today`=1")->query();
         $stat_prepod_active = Teacher::find()->joinWith('timetables')->where('start_date >= DATE_ADD(CURDATE(), INTERVAL -1 DAY)')->groupBy('teacher_id')->All();
         //SELECT * FROM `timetable` tt LEFT JOIN teacher t ON id_teacher = teacher_id WHERE start_date >= NOW() group by teacher_id
         foreach ($stat_prepod_active as $item) {
-            $item->not_in_timetable_today=0;
+            $item->not_in_timetable_today = 0;
             $item->save();
         }
 //        $stat_group_active = Groupstep::find()->joinWith('timetables')->where('start_date > NOW()')->groupBy('group_id')->count();
@@ -63,12 +64,14 @@ class Teacher extends \yii\db\ActiveRecord
     }
 
 
-
-
     static function getAllActiveTeachers()
     {
 
+        // НЕ ТРОГАЙ !!!!!
+        // НЕ ТРОГАЙ !!!!!
+        // а то вем пары отменит
         $model = Teacher::find()->where(['status_teacher' => 1])->all();
+        //$model = Teacher::find()->where(['id_teacher' => 60])->all();
 
         return $model;
 

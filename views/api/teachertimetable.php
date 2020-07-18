@@ -5,7 +5,7 @@ foreach ($model as $item) {
 
     $date = \app\components\MyHelper::reverceDateFromAmeric($item->start_date);
 
-    $template = '    $time $room "$subj"$num <a href="https://t.me/'._BOT_NAME.'?start=grp='.$item->group->id_group.'">$grp</a>' . "\n";
+    $template = '    $time $room $subj$num <a href="https://t.me/'._BOT_NAME.'?start=grp='.$item->group->id_group.'">$grp</a>' . "\n";
     $vars = array(
         '$time' => $item->start_time,
         '$room' => Yii::$app->params['roomsId'][$item->room_id],

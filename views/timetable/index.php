@@ -28,14 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_tt',
             'countpara',
+            'city_id',
             'start_date',
             'start_time',
-            'stop_time',
+//            'stop_time',
             'teacher_id',
             //'subject_id',
             //'group_id',
             //'subject',
-            //'room_id',
+            'room_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

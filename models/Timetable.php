@@ -36,7 +36,7 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['start_date', 'start_time', 'stop_time'], 'safe'],
+            [['start_date', 'start_time', 'stop_time', 'city_id'], 'safe'],
             [['teacher_id', 'subject_id', 'group_id', 'room_id', 'countpara'], 'integer'],
             [['subject'], 'string', 'max' => 200],
             [['start_date', 'start_time','group_id'], 'unique', 'targetAttribute' => ['start_date', 'start_time','group_id']],

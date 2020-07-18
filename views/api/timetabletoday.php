@@ -7,7 +7,7 @@ echo "\n";
 $ctime = '';
 foreach ($model as $item) {
 
-    $template = '    $room <a href="https://t.me/' . _BOT_NAME . '?start=grp=' . $item->group->id_group . '">$grp</a> "$subj" <a href="https://t.me/' . _BOT_NAME . '?start=tchr=' . $item->teacher->id_teacher . '">$tch</a>' . "\n";
+    $template = '    $room <a href="https://t.me/' . _BOT_NAME . '?start=grp=' . $item->group->id_group . '">$grp</a> $subj <a href="https://t.me/' . _BOT_NAME . '?start=tchr=' . $item->teacher->id_teacher . '">$tch</a>' . "\n";
     $vars = array(
         '$time' => $item->start_time,
         '$room' => Yii::$app->params['roomsId'][$item->room_id],

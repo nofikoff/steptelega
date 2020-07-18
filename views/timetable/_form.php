@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'group_id')->textInput() ?>
 
+    <?= $form->field($model, 'city_id')->textInput() ?>
+
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'room_id')->textInput() ?>

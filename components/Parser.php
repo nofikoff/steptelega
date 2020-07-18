@@ -44,8 +44,10 @@ class Parser
     /**
      * {@inheritdoc}
      */
-    protected $loog_book_user;
-    protected $loog_book_pass;
+    public $loog_book_user;
+    public $loog_book_pass;
+    public $loog_book_id_city;
+    public $loog_book_id_city_cookies_string;
     //
     public $file_cookies = 'cookies.txt';
     //public $file_cookies = 'cookies.txt';
@@ -65,17 +67,19 @@ class Parser
     public function __construct()
     {
 
-        $this->loog_book_user = \Yii::$app->params['logbook_manager_user'];
-        $this->loog_book_pass = \Yii::$app->params['logbook_manager_password'];
-
-        //parent::init();
-        $this->get_auth();
 
         $this->telega = new MessageToTelegaApi();
         // инициализация
         $this->telega->API_KEY = \Yii::$app->params['API_KEY'];
         $this->telega->WEBHOOK_URL = \Yii::$app->params['WEBHOOK_URL'];
         $this->telega->API_URL = 'https://api.telegram.org/bot' . $this->telega->API_KEY . '/';
+
+
+        // ЖИМТОМИР
+        $this->loog_book_id_city_cookies_string="63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D";
+
+        //ЧЕРНОВЦЫ
+        //$this->loog_book_id_city_cookies_string="1482b0df4d97fd713ccc1ccca93ee9d6bea22776e845adffbf080f502c24ec2ea%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bi%3A46%3B%7D";
 
 
 //        $this->curl_debug=1;
@@ -231,7 +235,8 @@ class Parser
 
     }
 
-    function parse_shedul_json($id_teacher, $week = 0)
+    //по дефолту Житомр расписание $myCity_id=1 - какому горду принадлжеит это расписание
+    function parse_shedul_json($id_teacher, $week = 0, $myCity_id = 1)
     {
         echo $json = $this->get_schedule($week);
         echo $hr = "\n*************************************************************\n\n";
@@ -276,6 +281,7 @@ class Parser
                     // если англисйки то может несколько групп
                     $list_groups = explode(',', $dayOfweeks["groups"]);
 
+
                     foreach ($list_groups as $item_group) {
                         //
 
@@ -297,16 +303,33 @@ class Parser
 
                         }
 
+                        // если группа не определена = 1:UNDEFINED
+                        // перебираем известннгые групп в справочнике с учетом того что на входе может быть нескольк огрупп через ЗП
+                        // ИЛИ одна группа но с использованием ЗП в названии
+                        // ПЕРВАЯ версия - у нас несолкьо групп чре запятую $item_group! Если не прокатывает
+                        if ($myCity_id == 1) {
+                            $group_id = empty($groups[trim($item_group)]) ? 1 : $groups[trim($item_group)]; // получаем id по имени
+                            // ВТОРАЯ версия пробуем имя группы с запятой $dayOfweeks["groups"]
+                            if ($group_id == 1) $group_id = empty($groups[trim($dayOfweeks["groups"])]) ? 1 : $groups[trim($dayOfweeks["groups"])];
+                        } else {
+                            // смотри таблицы группа и города в БД
+                            // не определенная группа для других городов - равна IВ ГОРОДА
+                            $group_id = $myCity_id;
+                        }
 
                         $para = [
                             'start_date' => $dates[$dayOfweeks["weekday"]],
                             'start_time' => $dayOfweeks["l_start"],
                             'subject' => $dayOfweeks["short_name_spec"],
                             'teacher_id' => $id_teacher,
-                            // если группа не определена = 1:UNDEFINED
-                            'group_id' => empty($groups[trim($item_group)]) ? 1 : $groups[trim($item_group)], // получаем id по имени
+                            'group_id' => $group_id,
                             'room_id' => $room_id, // получаем id по имени
+                            'city_id' => $myCity_id // какому городу принадлежит это расписание
                         ];
+
+                        if ($para['group_id'] == 1) echo "****** ВНИМАНИЕ ГРУППА -=$item_group=- НЕ ОПРЕДЕЛЕНА ******";
+
+
                         //пишем и шлем мессадж если новая пара
                         $this->saveNewTimeTableANDSendMessage($para);
 
@@ -328,12 +351,15 @@ class Parser
     {
 
         $model = new Timetable();
+
+        // ОБЯЗАТЕЛЬНЫЕ ПАРАМЕТРЫ
         $model->start_date = $para['start_date'];
         $model->start_time = $para['start_time'];
         $model->subject = $para['subject'];
         $model->teacher_id = $para['teacher_id'];
         $model->room_id = $para['room_id']; //
         $model->group_id = $para['group_id'];
+        $model->city_id = $para['city_id'];
 
 
         try {
@@ -375,13 +401,16 @@ class Parser
                     );
                 }
             } else {
-                /**   echo "NOT SAVED ВЕРОЯТНО ТАКАЯ ПАРА ЕСТЬ<br>\r\n";
-                 * print_r($model->getAttributes());
-                 * print_r($model->getErrors());*/
+                /** НЕ ОТКРЫВАЙ ЗАСРЕШЬ КОНСОЛЬ */
+//                echo "NOT SAVED ВЕРОЯТНО ТАКАЯ ПАРА ЕСТЬ<br>\r\n";
+//                print_r($model->getAttributes());
+//                print_r($model->getErrors());
+//                print_r($para);
             }
 
 
         } catch (\Exception $e) {
+
             echo "\r\n\r\n";
             echo " ОШИБКА ЗАПИСИ ПАРЫ А БАЗУ МОЖЕТ УДАЛИТЬ ЭТО СООБЩЕНИЕ ?????????????? проверь код";
             echo $e->getMessage();
@@ -576,7 +605,8 @@ class Parser
         $headers =
             [
                 // не трогать - магия
-                'Cookie: city_id=63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D',
+                'Cookie: city_id='.$this->loog_book_id_city_cookies_string,
+                //'Cookie: city_id=1482b0df4d97fd713ccc1ccca93ee9d6bea22776e845adffbf080f502c24ec2ea%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bi%3A46%3B%7D',
                 'origin: https://logbook.itstep.org',
                 //ошибка безопасности
                 //'x-csrf-token: qCtF_ObmoGocC61q94TaviGxXAiJG9twNFcg88cL3V_RYT2Ol97yCUpuyz6fyavdaOA3fM5Y7BcZNBmjgSaJCw==',
@@ -599,7 +629,7 @@ class Parser
     function set_cookie_idcity()
     {
         //       #HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	PHPSESSID	eb8n7h1nbhenbh8mftorgrff6q
-        $cook_city = "#HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	city_id	63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D";
+        $cook_city = "#HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	city_id	".$this->loog_book_id_city_cookies_string;
         $mode = (!file_exists($this->file_cookies)) ? 'w' : 'a';
         $cookFile = fopen($this->file_cookies, $mode);
         fwrite($cookFile, "" . $cook_city);
