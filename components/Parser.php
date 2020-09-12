@@ -76,7 +76,7 @@ class Parser
 
 
         // ЖИМТОМИР
-        $this->loog_book_id_city_cookies_string="63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D";
+        $this->loog_book_id_city_cookies_string = "63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D";
 
         //ЧЕРНОВЦЫ
         //$this->loog_book_id_city_cookies_string="1482b0df4d97fd713ccc1ccca93ee9d6bea22776e845adffbf080f502c24ec2ea%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bi%3A46%3B%7D";
@@ -114,7 +114,7 @@ class Parser
         $headers =
             [
                 'pragma: no-cache',
-                // здесь не надо - один раз сохранили в куках и все
+                // здесь не надо - один раз сохранили в куках и все УЖЕ НЕ ТРОГАЙ МНОГО ГОРОДОВ!!!!
                 //'cookie: city_id=63c5f156f33750fada375e816fde6012258e3d72456bfb948ecb54fbea6058a1a%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bs%3A2%3A%2239%22%3B%7D',
                 'origin: https://logbook.itstep.org',
                 'accept-language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6',
@@ -163,6 +163,14 @@ class Parser
 
         $json = $this->get_teachers();
         $a = json_decode($json, true);
+
+        if (!is_array($a)) {
+            $loog_book_user = \Yii::$app->params['logbook_manager_user'];
+            $loog_book_pass = \Yii::$app->params['logbook_manager_password'];
+            $message = "Зимина поменяла пароль, уточни \n $loog_book_user \n $loog_book_pass";
+            $this->send_errors_admin_only_message($message);
+            die($message);
+        }
 
         $i = 0;
         $_actual_teacher_list = [];
@@ -241,6 +249,7 @@ class Parser
         echo $json = $this->get_schedule($week);
         echo $hr = "\n*************************************************************\n\n";
 
+
         //\Yii::info("\n\nid_teacher = $id_teacher; week = $week \n $json $hr", 'parsershcheduler');
 
         $a = json_decode($json, true);
@@ -269,8 +278,6 @@ class Parser
                 $result[$key][] = $item;
             }
         }
-//            var_dump($num_row);
-//            var_dump($row);
 
         //перебираем дни недели     $num_dayOfweek-номер дня недели  $dayOfweeks-все пары на этой строке
         if (!empty($result))
@@ -401,6 +408,8 @@ class Parser
                     );
                 }
             } else {
+                /** НЕ ОТКРЫВАЙ ЗАСРЕШЬ КОНСОЛЬ */
+                /** НЕ ОТКРЫВАЙ ЗАСРЕШЬ КОНСОЛЬ */
                 /** НЕ ОТКРЫВАЙ ЗАСРЕШЬ КОНСОЛЬ */
 //                echo "NOT SAVED ВЕРОЯТНО ТАКАЯ ПАРА ЕСТЬ<br>\r\n";
 //                print_r($model->getAttributes());
@@ -595,9 +604,11 @@ class Parser
     function get_auth()
     {
 
-        // разлогиниваемся
-        // надо для отладки
-        //@unlink($this->file_cookies);
+        // разлогиниваемся ИБО МНОГО ГОРОДОВ !!!!!!!
+        // разлогиниваемся ИБО МНОГО ГОРОДОВ !!!!!!!
+        // разлогиниваемся ИБО МНОГО ГОРОДОВ !!!!!!!
+        // разлогиниваемся ИБО МНОГО ГОРОДОВ !!!!!!!
+        @unlink($this->file_cookies);
 
 
         $post_fields = '{"LoginForm":{"id_city":"39","username":"' . $this->loog_book_user . '","password":"' . $this->loog_book_pass . '"}}';
@@ -605,7 +616,7 @@ class Parser
         $headers =
             [
                 // не трогать - магия
-                'Cookie: city_id='.$this->loog_book_id_city_cookies_string,
+                'Cookie: city_id=' . $this->loog_book_id_city_cookies_string,
                 //'Cookie: city_id=1482b0df4d97fd713ccc1ccca93ee9d6bea22776e845adffbf080f502c24ec2ea%3A2%3A%7Bi%3A0%3Bs%3A7%3A%22city_id%22%3Bi%3A1%3Bi%3A46%3B%7D',
                 'origin: https://logbook.itstep.org',
                 //ошибка безопасности
@@ -629,7 +640,7 @@ class Parser
     function set_cookie_idcity()
     {
         //       #HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	PHPSESSID	eb8n7h1nbhenbh8mftorgrff6q
-        $cook_city = "#HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	city_id	".$this->loog_book_id_city_cookies_string;
+        $cook_city = "#HttpOnly_logbook.itstep.org	FALSE	/	FALSE	0	city_id	" . $this->loog_book_id_city_cookies_string;
         $mode = (!file_exists($this->file_cookies)) ? 'w' : 'a';
         $cookFile = fopen($this->file_cookies, $mode);
         fwrite($cookFile, "" . $cook_city);
@@ -739,7 +750,7 @@ class Parser
         if ($flag == 0) return
             [
                 'changed' => 1,
-                'message' => 'ПАРА ОТМЕНЕНА',
+                'message' => '❌ ПАРА ОТМЕНЕНА',
                 'IDMySQL' => $id_mysql,
                 'IDMyStatArr' => -1,
             ];
@@ -749,7 +760,7 @@ class Parser
             return
                 [
                     'changed' => 1,
-                    'message' => 'ТЕМА ПАРЫ ИЗМЕНЕНА',
+                    'message' => '📋 ТЕМА ПАРЫ ИЗМЕНЕНА',
                     'IDMySQL' => $id_mysql,
                     'IDMyStatArr' => $key,
                 ];
@@ -760,7 +771,7 @@ class Parser
             return
                 [
                     'changed' => 1,
-                    'message' => 'ПРЕПОД. ЗАМЕНЕН',
+                    'message' => '👨‍🏫 ПРЕПОД. ЗАМЕНЕН',
                     'IDMySQL' => $id_mysql,
                     'IDMyStatArr' => $key,
                 ];
@@ -772,7 +783,7 @@ class Parser
                 [
                     'changed' => 1,
                     // ВНИАНИЕ 'КАБИНЕТ ИЗМЕНЕН' ключ и к нему привязано далее условие!!
-                    'message' => 'КАБИНЕТ ИЗМЕНЕН',
+                    'message' => '🎯 КАБИНЕТ ИЗМЕНЕН',
                     'IDMySQL' => $id_mysql,
                     'IDMyStatArr' => $key,
                 ];
@@ -892,7 +903,7 @@ class Parser
 
             if ($changed['changed']) {
                 // ПАРА ИЗМЕНЕНА
-                $message = "❌ <b>" . $changed['message'] . "</b>\n";
+                $message = "<b>" . $changed['message'] . "</b>\n";
                 // СТАРАЯ ПАРА
                 $message .= $this->message_template_para($model);
 

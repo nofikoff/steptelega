@@ -15,6 +15,7 @@ namespace app\commands;
 use app\components\MyHelper;
 use app\components\Parser;
 use app\components\ParserExamens;
+use app\controllers\TimetableController;
 use app\models\Groupstep;
 use app\models\Teacher;
 use app\models\TelegramSubscribtion;
@@ -43,10 +44,17 @@ class HelloController extends Controller
      * @return int Exit code
      */
 
-    public function actionTest()
+    public function actionTesttest()
     {
 
+        $a = new TimetableController(0, '');
+        // расписание
+        $timetable_today = $a->helperToday();
+    }
 
+
+    public function actionTest()
+    {
 
         while ($a = Timetable::find()
             ->where(['countpara' => 0])
@@ -86,6 +94,9 @@ class HelloController extends Controller
         }
     }
 
+
+    // ВНИМАНИЕ ОПАСНО очерди рассылок нет, по этому если парсер увиит частично расписания и дойдет до рассылки увдеомлений
+    // будет 500 мессаджей что пары отменены !!!!!!!!!!!
     public function actionCron()
     {
         //ВСЕ НОВОЕ РАСПИСАНИЕ В ОДИН МАССИВ!!
@@ -93,6 +104,56 @@ class HelloController extends Controller
 
         //define('_BOT_NAME', 'StepToday_bot');
         define('_BOT_NAME', 'ITStepZhitomir_bot');
+
+
+//        $a->loog_book_user = \Yii::$app->params['logbook_Lutsk_my_login'];
+//        $a->loog_book_pass = \Yii::$app->params['logbook_Lutsk_my_pass'];
+//        $a->loog_book_id_city = "null";
+//        $a->get_auth();
+//        // этоту тта не надо
+//        //$a->change_teacher(60);
+//        // пишем в мое распиание 60
+//        $a->parse_shedul_json(60, 0, 2);
+//        $a->parse_shedul_json(60, 1, 2);
+//        exit;
+//        exit;
+//        exit;
+//        exit;
+
+
+        /**
+         * ПРИ ДОБАВЛЕНИИ НОВОГО ГОРОДА НЕ ЗАБУДЬ ДЖОБАВИТЬ ОДНОИМЕННУЮ ГРУППУ В ТЕМ ЖЕ ID
+         * ПРИ ДОБАВЛЕНИИ НОВОГО ГОРОДА НЕ ЗАБУДЬ ДЖОБАВИТЬ ОДНОИМЕННУЮ ГРУППУ В ТЕМ ЖЕ ID
+         * ПРИ ДОБАВЛЕНИИ НОВОГО ГОРОДА НЕ ЗАБУДЬ ДЖОБАВИТЬ ОДНОИМЕННУЮ ГРУППУ В ТЕМ ЖЕ ID
+         * ПРИ ДОБАВЛЕНИИ НОВОГО ГОРОДА НЕ ЗАБУДЬ ДЖОБАВИТЬ ОДНОИМЕННУЮ ГРУППУ В ТЕМ ЖЕ ID
+         *
+         */
+
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        /**  НЕ ТРОГАЙ !!!!  */
+        // ОДЕССА
+        // ОДЕССА
+        // ОДЕССА
+        // ОДЕССА
+        //@unlink("/home/steptelega/public_html/cookies.txt");
+
+        $a->loog_book_user = \Yii::$app->params['logbook_Odessa_my_login'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_Odessa_my_pass'];
+        $a->loog_book_id_city = "null";
+        $a->get_auth();
+        // этоту тта не надо
+        //$a->change_teacher(60);
+        // пишем в мое распиание 60
+        $a->parse_shedul_json(60, 0, 4);
+        $a->parse_shedul_json(60, 1, 4);
+        $a->parse_shedul_json(60, 2, 4);
+        $a->parse_shedul_json(60, 3, 4);
+        $a->parse_shedul_json(60, 4, 4);
+        $a->parse_shedul_json(60, 5, 4);
+        $a->parse_shedul_json(60, 6, 4);
+        $a->parse_shedul_json(60, 7, 4);
+        $a->parse_shedul_json(60, 8, 4);
 
 
         /**  НЕ ТРОГАЙ !!!!  */
@@ -106,6 +167,9 @@ class HelloController extends Controller
         $a->loog_book_user = \Yii::$app->params['logbook_Chernovtsy_Zhitomir_my_login'];
         $a->loog_book_pass = \Yii::$app->params['logbook_Chernovtsy_Zhitomir_my_pass'];
         // черновцы 46
+        // луцк 13
+        // житомир 39
+
         $a->loog_book_id_city = "46";
         $a->get_auth();
 
@@ -135,6 +199,11 @@ class HelloController extends Controller
         $a->parse_shedul_json(60, 1, 3);
         $a->parse_shedul_json(60, 2, 3);
         $a->parse_shedul_json(60, 3, 3);
+        $a->parse_shedul_json(60, 4, 3);
+        $a->parse_shedul_json(60, 5, 3);
+        $a->parse_shedul_json(60, 6, 3);
+        $a->parse_shedul_json(60, 7, 3);
+        $a->parse_shedul_json(60, 8, 3);
 
 
         /**  НЕ ТРОГАЙ !!!!  */
@@ -156,6 +225,65 @@ class HelloController extends Controller
         $a->parse_shedul_json(60, 1, 2);
         $a->parse_shedul_json(60, 2, 2);
         $a->parse_shedul_json(60, 3, 2);
+        $a->parse_shedul_json(60, 4, 2);
+        $a->parse_shedul_json(60, 5, 2);
+        $a->parse_shedul_json(60, 6, 2);
+        $a->parse_shedul_json(60, 7, 2);
+        $a->parse_shedul_json(60, 8, 2);
+        // КОНЕЦ ЛУЦК
+        // КОНЕЦ ЛУЦК
+        // КОНЕЦ ЛУЦК
+
+
+        // ГАРМАШ Луцк начало
+        // ГАРМАШ Луцк начало
+        // ГАРМАШ Луцк начало
+        // ГАРМАШ Луцк начало
+
+
+        @unlink("/home/steptelega/public_html/cookies.txt");
+        $a->loog_book_user = \Yii::$app->params['logbook_Lutsk_garmash_login'];
+        $a->loog_book_pass = \Yii::$app->params['logbook_Lutsk_garmash_pass'];
+        // черновцы 46
+        // луцк 13
+        // житомир 39
+        $a->loog_book_id_city = "13";
+        $a->get_auth();
+
+        // переключим город дропдаун в логбуке
+        // переключим город дропдаун в логбуке
+        $headers =
+            [
+                'authority: logbook.itstep.org',
+                'pragma: no-cache',
+                'cache-control: no-cache',
+                'upgrade-insecure-requests: 1',
+                'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36',
+                'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                'sec-fetch-site: same-origin',
+                'sec-fetch-mode: navigate',
+                'sec-fetch-user: ?1',
+                'sec-fetch-dest: document',
+                'referer: https://logbook.itstep.org/',
+                'accept-language: en-UA,en;q=0.9,ru-AU;q=0.8,ru;q=0.7,en-US;q=0.6',
+            ];
+        $b = $a->send_http_post("https://logbook.itstep.org/auth/change-city?city=" . $a->loog_book_id_city, "GET", $headers);
+
+        // пишем в мое распиание 104
+        $a->parse_shedul_json(104, 0, 2);
+        $a->parse_shedul_json(104, 1, 2);
+        $a->parse_shedul_json(104, 2, 2);
+        $a->parse_shedul_json(104, 3, 2);
+        // КОНЕЦ ЛУЦК ГАРМАШ
+        // КОНЕЦ ЛУЦК ГАРМАШ
+        // КОНЕЦ ЛУЦК ГАРМАШ
+
+//        print_r($a->curent_rasspisanie_in_mystat);
+//        exit;
+//        exit;
+//        exit;
+//        exit;
+//        exit;
 
 
         // DONT MOVE !!! -2019.09 сервис закрыт с внешнего мира по IP https://adminlb.itstep.org/
@@ -188,6 +316,15 @@ class HelloController extends Controller
             $a->parse_shedul_json($teacher->id_teacher, 1);
             $a->parse_shedul_json($teacher->id_teacher, 2);
             $a->parse_shedul_json($teacher->id_teacher, 3);
+
+            // себе любимому
+            if ($teacher->id_teacher == 60) {
+                $a->parse_shedul_json($teacher->id_teacher, 4);
+                $a->parse_shedul_json($teacher->id_teacher, 5);
+                $a->parse_shedul_json($teacher->id_teacher, 6);
+                $a->parse_shedul_json($teacher->id_teacher, 7);
+                $a->parse_shedul_json($teacher->id_teacher, 8);
+            }
         }
 
         // отмечаем тичеров и группы у которых нет расписания - НЕт раписания и не показываем в боте

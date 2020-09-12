@@ -5,6 +5,8 @@ echo "\n";
 
 //print_r($model);
 $ctime = '';
+
+
 foreach ($model as $item) {
 
     $template = '    $room <a href="https://t.me/' . _BOT_NAME . '?start=grp=' . $item->group->id_group . '">$grp</a> $subj <a href="https://t.me/' . _BOT_NAME . '?start=tchr=' . $item->teacher->id_teacher . '">$tch</a>' . "\n";

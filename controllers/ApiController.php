@@ -115,7 +115,7 @@ class ApiController extends Controller
         //  МЕТКА ТЕКУЩЕГО ДНЯ ЧТО ОТОБРАЖАЕТСЯ
         $_curr_delta_inc = 0;
         if (
-            mb_stripos($this->telega->message_on_webhook, "/today/") === 0 OR mb_stripos($this->telega->message_on_webhook, "/free/") === 0
+            mb_stripos($this->telega->message_on_webhook, "/today/") === 0 or mb_stripos($this->telega->message_on_webhook, "/free/") === 0
         ) {
             $_curr_delta_inc = explode('/', $this->telega->message_on_webhook);
             // указан инкремент
@@ -185,7 +185,7 @@ class ApiController extends Controller
             /** ЧАТ студентов */
             // ЕСЛИ Бота юзает какойто чат студентов - гасим его попытки использовать
 
-            if ($this->catchGroupsubscr() ) {
+            if ($this->catchGroupsubscr()) {
 
                 //
 //                $this->telega->sendMessageAPI(
@@ -542,7 +542,9 @@ Bot адрес @ITStepZhitomir_bot
             if (mb_stripos($this->telega->message_on_webhook, "SelectFroup") === 0) {
                 //
                 $groups = Groupstep::find()
-                    ->where("`not_in_timetable_today` = 0")
+                    // not_in_timetable_today = 1 нет  в будущем расписании
+                    // notactive  = 1 в ручную залокированы например временные группы других городов
+                    ->where("`not_in_timetable_today` = 0 AND `notactive` = 0 ")
                     ->orderBy('name_group')
                     ->all();
                 $j = -1;
