@@ -264,6 +264,7 @@ class Parser
 
         if (!isset($a['body']) or !is_array($a['body'])) {
             echo $m = "\r\n\r\n *************************** ФАТАЛ ЕРОР - ВНИМАНИЕ с ТИЧЕРОМ $id_teacher траблы не вижу расписание *****************************\r\n";
+            \Yii::error($m);
             $this->send_errors_admin_only_message($m);
             die ("ОСТАНОВИИСЬ ЧТОБЫ НЕ ЗАТЕРЕТИЬ РАСПИСАНИЕ ОСТАЛЬНЫХ");
             die ("ОСТАНОВИИСЬ ЧТОБЫ НЕ ЗАТЕРЕТИЬ РАСПИСАНИЕ ОСТАЛЬНЫХ");
@@ -299,13 +300,12 @@ class Parser
 
                         } catch (\Exception $e) {
 
-                            echo "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"];
-                            echo "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"];
-                            echo "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"];
-                            echo "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"];
-                            echo "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"];
-
-                            //print_r($e);
+                            $mmm001 = "\nКАБИНЕТ не определен" . $dayOfweeks["num_rooms"] . "город {$myCity_id}";
+                            echo $mmm001;
+                            echo $mmm001;
+                            echo $mmm001;
+                            \Yii::error($mmm001);
+                            $this->send_errors_admin_only_message($mmm001);
                             continue;
 
                         }
@@ -334,8 +334,12 @@ class Parser
                             'city_id' => $myCity_id // какому городу принадлежит это расписание
                         ];
 
-                        if ($para['group_id'] == 1) echo "****** ВНИМАНИЕ ГРУППА -=$item_group=- НЕ ОПРЕДЕЛЕНА ******";
-
+                        if ($para['group_id'] == 1) {
+                            $mmm001 = "****** ВНИМАНИЕ ГРУППА -=$item_group=- НЕ ОПРЕДЕЛЕНА ******";
+                            echo $mmm001;
+                            \Yii::error($mmm001);
+                            $this->send_errors_admin_only_message($mmm001);
+                        }
 
                         //пишем и шлем мессадж если новая пара
                         $this->saveNewTimeTableANDSendMessage($para);
@@ -421,8 +425,9 @@ class Parser
         } catch (\Exception $e) {
 
             echo "\r\n\r\n";
-            echo " ОШИБКА ЗАПИСИ ПАРЫ А БАЗУ МОЖЕТ УДАЛИТЬ ЭТО СООБЩЕНИЕ ?????????????? проверь код";
-            echo $e->getMessage();
+            echo $mmm001 = " ОШИБКА ЗАПИСИ ПАРЫ А БАЗУ МОЖЕТ УДАЛИТЬ ЭТО СООБЩЕНИЕ ?????????????? проверь код" . $e->getMessage();
+            \Yii::error($mmm001);
+            $this->send_errors_admin_only_message($mmm001);
             echo "\r\n\r\n";
 
         }

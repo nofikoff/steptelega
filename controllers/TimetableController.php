@@ -106,18 +106,6 @@ class TimetableController extends Controller
 //        }//
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         $timetable_today =
             $this->renderPartial('/api/timetabletoday', [
                 'model' => $searchModel,
@@ -149,7 +137,7 @@ class TimetableController extends Controller
 
         //подправляем массив расписания - занятыми аудиториями
         foreach ($searchModel as $item) {
-                $result_free[$item->start_time][Yii::$app->params['roomsId'][$item->room_id]] = '<a href="https://t.me/' . _BOT_NAME . '?start=tchr=' . $item->teacher->id_teacher . '">' . $item->teacher->finame . '</a>';
+            $result_free[$item->start_time][Yii::$app->params['roomsId'][$item->room_id]] = '<a href="https://t.me/' . _BOT_NAME . '?start=tchr=' . $item->teacher->id_teacher . '">' . $item->teacher->finame . '</a>';
         }
 
         if (!$searchModel) return "В Академии " . MyHelper::reverceDateFromAmeric(date('Y-m-d', $time)) . " выходной или Bot не видит расписание! ";
@@ -294,7 +282,15 @@ class TimetableController extends Controller
             if (MyHelper::stringNameWeek($start_date) == '') $name_week = "Неделя c " . MyHelper::reverceDateFromAmeric($start_date) . " по " . MyHelper::reverceDateFromAmeric($stop_date);
 
         }
-        $name_week .= "\nРасписание для группы 👥 <b>" . Groupstep::findOne($id)->name_group . "</b>";
+
+
+        $group_object = Groupstep::findOne($id);
+        $group_telegram_link = '';
+        if ($group_object->tg_invite_link) {
+            $group_telegram_link = "<a href='" . $group_object->tg_invite_link . "'>🖃</a>";
+        }
+        //
+        $name_week .= "\nРасписание для группы 👥 <b>" . $group_object->name_group . "</b> $group_telegram_link";
         $searchModel = Timetable::find()
             ->where("`start_date` >= '" . $start_date . "'")
             ->andwhere("`start_date` <= '" . $stop_date . "'")

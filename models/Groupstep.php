@@ -30,7 +30,7 @@ class Groupstep extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name_group', 'description_group'], 'string', 'max' => 150],
+            [['name_group', 'description_group', 'tg_invite_link'], 'string', 'max' => 150],
             [['login_telega_group'], 'string', 'max' => 45],
             [['notactive', 'not_in_timetable_today'], 'safe']
 

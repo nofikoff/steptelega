@@ -222,6 +222,9 @@ class HelloController extends Controller
         //$a->change_teacher(60);
         // пишем в мое распиание 60
         $a->parse_shedul_json(60, 0, 2);
+
+
+
         $a->parse_shedul_json(60, 1, 2);
         $a->parse_shedul_json(60, 2, 2);
         $a->parse_shedul_json(60, 3, 2);
@@ -233,6 +236,7 @@ class HelloController extends Controller
         // КОНЕЦ ЛУЦК
         // КОНЕЦ ЛУЦК
         // КОНЕЦ ЛУЦК
+
 
 
         // ГАРМАШ Луцк начало
